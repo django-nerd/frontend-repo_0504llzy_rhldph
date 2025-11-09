@@ -40,13 +40,14 @@ export default function Hero() {
 
   return (
     <section ref={containerRef} className="relative min-h-[90vh] flex items-center overflow-hidden">
+      {/* Spline scene as full-bleed background (no negative z-index) */}
       <div className="absolute inset-0">
-        <Spline scene="https://prod.spline.design/6m0k8C8C2g3vO3oD/scene.splinecode" style={{ width: '100%', height: '100%' }} />
+        <Spline scene="https://prod.spline.design/igThmltzmqv5hkWo/scene.splinecode" style={{ width: '100%', height: '100%' }} />
       </div>
 
-      {/* Overlay copies */}
+      {/* Foreground content */}
       <motion.div style={{ y, opacity }} className="relative mx-auto max-w-7xl px-6 sm:px-8 w-full">
-        <div className="pointer-events-none select-none">
+        <div className="select-none">
           <h1 className="text-4xl sm:text-6xl md:text-7xl font-black tracking-tight text-white drop-shadow-[0_2px_12px_rgba(0,0,0,0.35)]">
             Godæon Studio
           </h1>
