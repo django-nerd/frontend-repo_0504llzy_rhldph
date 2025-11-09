@@ -1,47 +1,27 @@
 import React from 'react';
 
-// Global background effects: soft radial glows, vignette, and film grain
 export default function BackgroundFX() {
   return (
-    <div aria-hidden className="pointer-events-none fixed inset-0 -z-0">
+    <div aria-hidden="true" className="fixed inset-0 pointer-events-none">
       {/* Radial gradient glows */}
-      <div className="absolute inset-0 opacity-60 mix-blend-screen">
-        <div className="absolute -top-32 -left-32 h-96 w-96 rounded-full blur-3xl"
-             style={{
-               background: 'radial-gradient(closest-side, rgba(99,102,241,0.35), transparent 70%)',
-             }}
-        />
-        <div className="absolute top-1/4 -right-20 h-[28rem] w-[28rem] rounded-full blur-3xl"
-             style={{
-               background: 'radial-gradient(closest-side, rgba(56,189,248,0.35), transparent 70%)',
-             }}
-        />
-        <div className="absolute bottom-0 left-1/3 h-80 w-80 rounded-full blur-3xl"
-             style={{
-               background: 'radial-gradient(closest-side, rgba(147,51,234,0.25), transparent 70%)',
-             }}
-        />
+      <div className="absolute inset-0 opacity-60 mix-blend-screen pointer-events-none">
+        <div className="absolute -top-20 -left-20 h-96 w-96 rounded-full blur-3xl bg-gradient-to-br from-fuchsia-500/50 to-blue-500/40" />
+        <div className="absolute bottom-0 right-0 h-[28rem] w-[28rem] rounded-full blur-3xl bg-gradient-to-tr from-blue-500/40 to-indigo-500/40" />
       </div>
 
-      {/* Subtle vignette */}
-      <div className="absolute inset-0" style={{
-        background: 'radial-gradient(60% 60% at 50% 40%, rgba(0,0,0,0) 0%, rgba(0,0,0,0.35) 100%)'
+      {/* Vignette overlay */}
+      <div className="absolute inset-0 pointer-events-none" style={{
+        background:
+          'radial-gradient(80% 60% at 50% 50%, rgba(0,0,0,0) 0%, rgba(0,0,0,0.25) 60%, rgba(0,0,0,0.6) 100%)'
       }} />
 
-      {/* Film grain (noise) */}
-      <div className="absolute inset-0 opacity-[0.07]"
-           style={{
-             backgroundImage: `url("data:image/svg+xml;utf8,${encodeURIComponent(`
-               <svg xmlns='http://www.w3.org/2000/svg' width='140' height='140' viewBox='0 0 140 140'>
-                 <filter id='n'>
-                   <feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/>
-                   <feColorMatrix type='saturate' values='0'/>
-                 </filter>
-                 <rect width='100%' height='100%' filter='url(%23n)' opacity='0.8'/>
-               </svg>
-             `)}")`
-           }}
-      />
+      {/* Film grain using SVG noise */}
+      <svg className="absolute inset-0 w-full h-full opacity-[0.06] pointer-events-none" xmlns="http://www.w3.org/2000/svg">
+        <filter id="noiseFilter">
+          <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="4" stitchTiles="stitch" />
+        </filter>
+        <rect width="100%" height="100%" filter="url(#noiseFilter)" />
+      </svg>
     </div>
   );
 }

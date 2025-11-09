@@ -1,43 +1,41 @@
 import React from 'react';
-import BackgroundFX from './components/BackgroundFX.jsx';
-import Hero from './components/Hero.jsx';
-import Trailer from './components/Trailer.jsx';
-import Lore from './components/Lore.jsx';
-import Community from './components/Community.jsx';
-import InvestorPortal from './components/InvestorPortal.jsx';
+import BackgroundFX from './components/BackgroundFX';
+import Hero from './components/Hero';
+import Trailer from './components/Trailer';
+import Lore from './components/Lore';
+import Community from './components/Community';
 
 export default function App() {
   return (
-    <div className="relative min-h-screen bg-black text-white">
+    <div className="relative min-h-screen bg-[#0a0b10] text-white antialiased">
       <BackgroundFX />
 
-      <header className="relative z-20 mx-auto flex max-w-6xl items-center justify-between px-6 py-5">
-        <a href="#" className="text-lg font-semibold tracking-wide">Godæon Studio</a>
-        <nav className="hidden gap-6 text-sm text-white/70 md:flex">
-          <a className="transition-colors hover:text-white" href="#trailer">Teaser</a>
-          <a className="transition-colors hover:text-white" href="#lore">Lore</a>
-          <a className="transition-colors hover:text-white" href="#community">Community</a>
-          <a className="transition-colors hover:text-white" href="#invest">Invest</a>
-        </nav>
+      {/* Header */}
+      <header className="sticky top-0 z-40 border-b border-white/10 bg-black/30 backdrop-blur-xl">
+        <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-3 sm:px-8">
+          <div className="flex items-center gap-3">
+            <div className="h-8 w-8 rounded-md bg-gradient-to-br from-fuchsia-500 to-blue-500" />
+            <span className="text-sm font-semibold tracking-wider text-white/90">GODÆON STUDIO</span>
+          </div>
+          <nav className="hidden sm:flex items-center gap-6 text-sm text-white/70">
+            <a href="#" className="hover:text-white">Trailer</a>
+            <a href="#" className="hover:text-white">Lore</a>
+            <a href="#" className="hover:text-white">Community</a>
+          </nav>
+        </div>
       </header>
 
-      <main className="relative z-10">
+      {/* Content */}
+      <main>
         <Hero />
         <Trailer />
         <Lore />
         <Community />
-        <InvestorPortal />
       </main>
 
-      <footer className="relative z-10 border-t border-white/10 py-10">
-        <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-6 px-6 sm:flex-row">
-          <p className="text-white/50">© {new Date().getFullYear()} Godæon Studio. All rights reserved.</p>
-          <div className="flex items-center gap-4 text-sm text-white/60">
-            <a href="#" className="hover:text-white">Privacy</a>
-            <span className="opacity-30">•</span>
-            <a href="#" className="hover:text-white">Terms</a>
-          </div>
-        </div>
+      {/* Footer */}
+      <footer className="border-t border-white/10 py-10 text-center text-xs text-white/60">
+        <p>© {new Date().getFullYear()} Godæon Studio. All rights reserved.</p>
       </footer>
     </div>
   );
