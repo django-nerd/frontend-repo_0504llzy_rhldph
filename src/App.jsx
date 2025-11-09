@@ -4,18 +4,19 @@ import Trailer from './components/Trailer';
 import Lore from './components/Lore';
 import Community from './components/Community';
 import InvestorPortal from './components/InvestorPortal';
+import BackgroundFX from './components/BackgroundFX';
 
 function App() {
   const [openInvestorFromHero, setOpenInvestorFromHero] = useState(false);
 
   const handleInvestorClick = useCallback(() => {
-    // Toggle a state that InvestorPortal can react to via a key prop
     setOpenInvestorFromHero(true);
     setTimeout(() => setOpenInvestorFromHero(false), 50);
   }, []);
 
   return (
     <div className="min-h-screen bg-black font-sans text-white">
+      <BackgroundFX />
       <Hero onInvestorClick={handleInvestorClick} />
       <main>
         <Trailer />
@@ -23,7 +24,7 @@ function App() {
         <Community />
         <InvestorPortal key={openInvestorFromHero ? 'open' : 'closed'} />
       </main>
-      <footer className="bg-black py-10 text-center text-xs text-zinc-500">
+      <footer className="bg-black/80 py-10 text-center text-xs text-zinc-500 backdrop-blur">
         © {new Date().getFullYear()} Godæon Studio — All Rights Reserved.
       </footer>
     </div>
