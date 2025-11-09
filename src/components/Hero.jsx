@@ -1,110 +1,97 @@
 import React, { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import Spline from '@splinetool/react-spline';
-import { ArrowRight, Play } from 'lucide-react';
 
-function MagneticButton({ children, href, variant = 'primary' }) {
+function MagneticButton({ children, href }) {
   const ref = useRef(null);
 
-  const onMove = (e) => {
+  const onMouseMove = (e) => {
     const el = ref.current;
     if (!el) return;
     const rect = el.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    const moveX = (x - rect.width / 2) * 0.08;
-    const moveY = (y - rect.height / 2) * 0.08;
-    el.style.transform = `translate(${moveX}px, ${moveY}px)`;
-    const glow = el.querySelector('.btn-glow');
+    const x = e.clientX - rect.left - rect.width / 2;
+    const y = e.clientY - rect.top - rect.height / 2;
+    el.style.transform = `translate(${x * 0.18}px, ${y * 0.18}px)`;
+    const glow = el.querySelector('.glow');
     if (glow) {
-      glow.style.opacity = '0.9';
-      glow.style.background = `radial-gradient(120px 120px at ${x}px ${y}px, rgba(255,255,255,0.35), rgba(255,255,255,0))`;
+      glow.style.transform = `translate(${x * 0.12}px, ${y * 0.12}px)`;
+      glow.style.opacity = '1';
     }
   };
 
-  const onLeave = () => {
+  const onMouseLeave = () => {
     const el = ref.current;
     if (!el) return;
-    el.style.transform = 'translate(0,0)';
-    const glow = el.querySelector('.btn-glow');
-    if (glow) glow.style.opacity = '0';
+    el.style.transform = 'translate(0, 0)';
+    const glow = el.querySelector('.glow');
+    if (glow) glow.style.opacity = '0.6';
   };
 
-  const base = 'inline-flex items-center gap-3 rounded-xl px-6 py-3 transition-all will-change-transform select-none';
-  const styles =
-    variant === 'primary'
-      ? 'bg-gradient-to-r from-indigo-600 to-fuchsia-600 text-white shadow-[0_10px_30px_-10px_rgba(168,85,247,.6)] hover:shadow-[0_18px_40px_-12px_rgba(99,102,241,.7)]'
-      : 'border border-white/15 bg-white/5 hover:bg-white/10 backdrop-blur-md text-white';
-
-  return (
-    <a
-      href={href}
-      className={`${base} ${styles} relative`}
+  const Inner = (
+    <div
       ref={ref}
-      onMouseMove={onMove}
-      onMouseLeave={onLeave}
+      onMouseMove={onMouseMove}
+      onMouseLeave={onMouseLeave}
+      className="relative isolate inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-6 py-3 text-white/90 backdrop-blur-md transition-colors hover:bg-white/10"
     >
-      <span className="btn-glow pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-200 rounded-xl" />
+      <span className="absolute glow -inset-px -z-10 rounded-full opacity-60 blur-xl transition-opacity"
+            style={{
+              background: 'radial-gradient(closest-side, rgba(99,102,241,0.45), rgba(56,189,248,0.35), transparent 70%)'
+            }}
+      />
       {children}
-    </a>
+    </div>
   );
+
+  if (href) {
+    return (
+      <a href={href} className="inline-block">
+        {Inner}
+      </a>
+    );
+  }
+  return Inner;
 }
 
 export default function Hero() {
   const containerRef = useRef(null);
   const { scrollYProgress } = useScroll({ target: containerRef, offset: ['start start', 'end start'] });
-  const parallaxY = useTransform(scrollYProgress, [0, 1], ['0vh', '-20vh']);
-  const titleY = useTransform(scrollYProgress, [0, 1], [0, -60]);
-  const fade = useTransform(scrollYProgress, [0, 1], [1, 0.5]);
+  const y = useTransform(scrollYProgress, [0, 1], [0, -120]);
+  const opacity = useTransform(scrollYProgress, [0, 1], [1, 0.6]);
 
   return (
-    <section ref={containerRef} className="relative min-h-[110vh] w-full overflow-hidden">
-      <motion.div style={{ y: parallaxY }} className="absolute inset-0">
-        <Spline scene="https://prod.spline.design/wwTRdG1D9CkNs368/scene.splinecode" style={{ width: '100%', height: '100%' }} />
+    <section ref={containerRef} className="relative flex min-h-[90vh] flex-col justify-center overflow-hidden">
+      <motion.div style={{ y, opacity }} className="relative h-[70vh] w-full">
+        <div className="absolute inset-0">
+          <Spline scene="https://prod.spline.design/7L1HJbX1o3SWTr2S/scene.splinecode" style={{ width: '100%', height: '100%' }} />
+        </div>
       </motion.div>
 
-      {/* Lightwash overlays - allow interaction */}
-      <div className="pointer-events-none absolute inset-0">
-        <div className="absolute inset-0 bg-gradient-to-b from-[#0a0a0e]/10 via-transparent to-[#0a0a0e]/60" />
-        <div className="absolute inset-0" style={{ background: 'radial-gradient(60% 50% at 50% 10%, rgba(99,102,241,0.25) 0%, rgba(10,10,14,0) 60%)' }} />
-      </div>
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
 
-      {/* Content */}
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 pb-28">
-        <div className="flex items-center justify-between">
-          <div className="pointer-events-auto">
-            <a href="#" className="text-xs md:text-sm inline-flex items-center gap-2 rounded-full px-4 py-2 border border-white/10 bg-white/5 backdrop-blur-md hover:bg-white/10 transition-colors">
-              Pre-alpha access
-              <ArrowRight size={14} className="opacity-70" />
-            </a>
-          </div>
-          <nav className="hidden md:flex items-center gap-6 text-sm text-white/70 pointer-events-auto">
-            <a href="#trailer" className="hover:text-white transition">Trailer</a>
-            <a href="#lore" className="hover:text-white transition">Lore</a>
-            <a href="#community" className="hover:text-white transition">Community</a>
-          </nav>
+      <div className="relative z-10 mx-auto max-w-6xl px-6">
+        <motion.h1
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8, ease: 'easeOut' }}
+          className="text-balance bg-gradient-to-b from-white to-white/60 bg-clip-text text-5xl font-semibold leading-tight text-transparent md:text-6xl"
+        >
+          Godæon Studio presents a next‑gen tactical FPS
+        </motion.h1>
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-20%'}}
+          transition={{ delay: 0.1, duration: 0.8 }}
+          className="mt-4 max-w-2xl text-lg text-white/70"
+        >
+          Ultra‑responsive gunplay, AI‑driven encounters, and cinematic immersion — optimized for high refresh and low latency.
+        </motion.p>
+        <div className="mt-8 flex flex-wrap items-center gap-4">
+          <MagneticButton href="#trailer">Watch teaser</MagneticButton>
+          <MagneticButton href="#community">Join community</MagneticButton>
         </div>
-
-        <motion.div style={{ y: titleY, opacity: fade }} className="mt-16">
-          <h1 className="text-5xl sm:text-6xl lg:text-7xl font-semibold tracking-tight leading-[1.05]">
-            <span className="bg-gradient-to-br from-indigo-300 via-white to-fuchsia-300 bg-clip-text text-transparent">Godæon</span>
-            <span className="text-white/80"> — Tactical FPS</span>
-          </h1>
-          <p className="mt-6 max-w-2xl text-white/70 text-lg">
-            Next-generation ballistics, dynamic extraction, and cooperative intel ops. Precision-first gunplay built for teams.
-          </p>
-
-          <div className="mt-10 flex flex-col sm:flex-row items-center gap-4">
-            <MagneticButton href="#trailer" variant="primary">
-              Watch trailer
-              <Play size={18} />
-            </MagneticButton>
-            <MagneticButton href="#community" variant="secondary">
-              Join community
-              <ArrowRight size={18} />
-            </MagneticButton>
-          </div>
-        </motion.div>
       </div>
     </section>
   );

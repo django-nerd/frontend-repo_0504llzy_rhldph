@@ -1,43 +1,57 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
 
-const text = `FIRST MISSION REPORT:\n\nUnit Ghostline deployed at 0300. Entry was clean.\nThermal signatures matched projections—until they didn’t.\n\nUnknown interference severed comms. Red static bled across our HUDs.\nA door opened where the blueprint showed a wall.\n\nWe walked through. The building breathed. And something watched back.`;
-
 export default function Lore() {
-  const [display, setDisplay] = useState('');
-
-  useEffect(() => {
-    let i = 0;
-    const id = setInterval(() => {
-      setDisplay(text.slice(0, i++));
-      if (i > text.length) clearInterval(id);
-    }, 18);
-    return () => clearInterval(id);
-  }, []);
-
   return (
-    <section id="lore" className="relative overflow-hidden bg-black py-24 text-white">
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(14,165,233,0.08),transparent_50%),radial-gradient(ellipse_at_bottom,rgba(244,63,94,0.07),transparent_50%)]" />
-      <div className="relative mx-auto max-w-5xl px-6">
+    <section id="lore" className="relative mx-auto max-w-6xl px-6 py-20">
+      <div className="mx-auto max-w-3xl text-center">
         <motion.h2
-          initial={{ opacity: 0, y: 15 }}
+          initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.4 }}
+          viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="mb-10 text-center text-3xl font-bold tracking-tight"
+          className="bg-gradient-to-b from-white to-white/60 bg-clip-text text-3xl font-semibold text-transparent md:text-4xl"
         >
-          First Mission Report
+          Lore: The Godæon Protocol
         </motion.h2>
+        <motion.p
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.05, duration: 0.6 }}
+          className="mt-3 text-white/70"
+        >
+          In the wake of a failed peace initiative, black‑box AIs assume command of off‑ledger task forces. You aren’t the hero—you’re a variable in their calculus.
+        </motion.p>
+      </div>
 
-        <div className="rounded-2xl border border-zinc-800 bg-zinc-950/80 p-6 backdrop-blur">
-          <div className="mb-4 h-1 w-full bg-gradient-to-r from-cyan-500 via-zinc-600 to-red-500" />
-          <pre className="whitespace-pre-wrap font-mono text-sm leading-7 text-zinc-200">
-            <span className="[text-shadow:_0_0_8px_rgba(0,255,255,0.35)]">
-              {display}
-            </span>
-          </pre>
-          <div className="mt-6 text-xs text-zinc-500">CLASSIFIED – EYES ONLY</div>
-        </div>
+      <div className="mt-10 grid gap-6 lg:grid-cols-3">
+        {[
+          {
+            t: 'Sectors',
+            d: 'Vertical mega‑cities fractured into corporate jurisdictions. Every block is a negotiation.',
+          },
+          {
+            t: 'Operators',
+            d: 'Augmented specialists with adaptive implants. Builds evolve as the AI observes your play.',
+          },
+          {
+            t: 'Conflict Model',
+            d: 'AI arbiters escalate from skirmish to siege based on telemetry—no two ops are alike.',
+          },
+        ].map((card, i) => (
+          <motion.div
+            key={card.t}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: i * 0.05, duration: 0.6 }}
+            className="rounded-xl border border-white/10 bg-white/5 p-6 text-white/80 backdrop-blur-md"
+          >
+            <h3 className="text-white text-lg font-semibold">{card.t}</h3>
+            <p className="mt-2 text-sm">{card.d}</p>
+          </motion.div>
+        ))}
       </div>
     </section>
   );
